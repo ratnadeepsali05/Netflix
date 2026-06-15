@@ -194,7 +194,7 @@ pipeline {
         }
         stage('Checkout from Git') {
             steps {
-                git branch: 'main', url: 'https://github.com/abhipraydhoble/netflix.git'
+                git branch: 'main', url: 'https://github.com/ratnadeepsali05/Netflix.git'
             }
         }
         stage("Sonarqube Analysis") {
@@ -208,7 +208,7 @@ pipeline {
         stage("quality gate") {
             steps {
                 script {
-                    waitForQualityGate abortPipeline: false, credentialsId: 'Sonar-token'
+                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token'
                 }
             }
         }
@@ -284,7 +284,7 @@ pipeline{
         }
         stage('Checkout from Git'){
             steps{
-                git branch: 'main', url: 'https://github.com/abhipraydhoble/netflix.git'
+                git branch: 'main', url: 'https://github.com/ratnadeepsali05/Netflix.git'
             }
         }
         stage("Sonarqube Analysis "){
@@ -322,21 +322,21 @@ pipeline{
             steps{
                 script{
                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){   
-                       sh "docker build --build-arg TMDB_V3_API_KEY=<yourapikey> -t netflix ."
-                       sh "docker tag netflix abhipraydhoble/netflix:latest "
-                       sh "docker push abhipraydhoble/netflix:latest "
+                       sh "docker build --build-arg TMDB_V3_API_KEY=1fb72d69376ed855465c96b94ea4c87e -t netflix ."
+                       sh "docker tag netflix ratnadeepsali05/netflix:latest "
+                       sh "docker push ratnadeepsali05/netflix:latest "
                     }
                 }
             }
         }
         stage("TRIVY"){
             steps{
-                sh "trivy image abhipraydhoble/netflix:latest > trivyimage.txt" 
+                sh "trivy image ratnadeepsali05/netflix:latest > trivyimage.txt" 
             }
         }
         stage('Deploy to container'){
             steps{
-                sh 'docker run -d --name netflix -p 8081:80 abhipraydhoble/netflix:latest'
+                sh 'docker run -d --name netflix -p 8081:80 ratnadeepsali05/netflix:latest'
             }
         }
     }
