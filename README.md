@@ -146,10 +146,10 @@ docker run -d --name netflix -p 8081:80 netflix:latest
 
 Goto Manage Jenkins →Plugins → Available Plugins →
 
-Install below plugins
+-> Install below plugins
 
-```Eclipse Temurin Installer
-
+Eclipse Temurin Installer
+```
 SonarQube Scanner
 ```
 NodeJs Plugin 
