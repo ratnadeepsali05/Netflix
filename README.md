@@ -67,7 +67,7 @@ squ_db12fcdf874ae5e92ae0d515e3b7d9221a362a3f : sonartoken
 
 Build and run your application using with your api key:
 ```
-docker build --build-arg TMDB_V3_API_KEY=<your-api-key> -t netflix
+docker build --build-arg TMDB_V3_API_KEY=<your-api-key> -t netflix .
 docker run -d --name netflix -p 8081:80 netflix:latest
 
 ```
@@ -89,11 +89,15 @@ docker run -d --name netflix -p 8081:80 netflix:latest
         
         To install Trivy:
         ```
-        sudo apt-get install wget apt-transport-https gnupg lsb-release
-        wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
-        echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
+        sudo mkdir -p /etc/apt/keyrings
+        curl -fsSL https://aquasecurity.github.io/trivy-repo/deb/public.key | \
+        sudo gpg --dearmor -o /etc/apt/keyrings/trivy.gpg
+        echo "deb [signed-by=/etc/apt/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb generic main" | \
+        sudo tee /etc/apt/sources.list.d/trivy.list
         sudo apt-get update
-        sudo apt-get install trivy        
+        sudo apt-get install trivy
+        trivy --version
+
         ```
         
         to scan image using trivy
@@ -121,15 +125,17 @@ docker run -d --name netflix -p 8081:80 netflix:latest
     OpenJDK 64-Bit Server VM (build 17.0.8+7-Debian-1deb12u1, mixed mode, sharing)
     
     #jenkins
-    sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
-    https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
-    echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
-    https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
-    /etc/apt/sources.list.d/jenkins.list > /dev/null
-    sudo apt-get update
-    sudo apt-get install jenkins
-    sudo systemctl start jenkins
+    wget https://get.jenkins.io/debian-stable/jenkins_2.516.1_all.deb
+
+    sudo apt install -y fontconfig openjdk-17-jre
+
+    sudo dpkg -i jenkins_2.516.1_all.deb
+
+    sudo apt --fix-broken install -y
+
     sudo systemctl enable jenkins
+    sudo systemctl start jenkins
+    sudo systemctl status jenkins
     ```
     
     - Access Jenkins in a web browser using the public IP of your EC2 instance.
@@ -142,12 +148,12 @@ Goto Manage Jenkins →Plugins → Available Plugins →
 
 Install below plugins
 
-1 Eclipse Temurin Installer (Install without restart)
-
-2 SonarQube Scanner (Install without restart)
-
-3 NodeJs Plugin (Install Without restart)
-
+Eclipse Temurin Installer
+``` 
+SonarQube Scanner
+``` 
+NodeJs Plugin 
+```
 4 Email Extension Plugin
 
 ### **Configure Java and Nodejs in Global Tool Configuration**
