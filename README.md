@@ -148,9 +148,8 @@ Goto Manage Jenkins →Plugins → Available Plugins →
 
 Install below plugins
 
-```
-Eclipse Temurin Installer
-```
+```Eclipse Temurin Installer
+
 SonarQube Scanner
 ```
 NodeJs Plugin 
